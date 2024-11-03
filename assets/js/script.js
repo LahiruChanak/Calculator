@@ -1,20 +1,58 @@
 const result = document.getElementById("result");
-const buttons = document.querySelectorAll(".buttons button");
+const buttons = document.querySelectorAll("button");
+
+let currentInput = "";
+let operator = "";
+let firstValue = null;
 
 buttons.forEach((button) => {
   button.addEventListener("click", () => {
-    if (button.textContent === "=") {
-      try {
-        result.value = eval(result.value);
-      } catch (error) {
-        result.value = "Error";
+    const buttonText = button.textContent;
+
+    if (button.classList.contains("number")) {
+      if (operator && currentInput !== "") {
+        currentInput = "";
       }
-    } else if (button.textContent === "AC") {
-      result.value = "";
+      currentInput += buttonText;
+      result.value = currentInput;
+    } else if (button.classList.contains("operator")) {
+      if (currentInput !== "") {
+        firstValue = parseFloat(currentInput);
+        operator = buttonText;
+        currentInput = "";
+      }
+    } else if (button.classList.contains("equals")) {
+      if (firstValue !== null && currentInput !== "") {
+        const secondValue = parseFloat(currentInput);
+        result.value = calculate(firstValue, operator, secondValue);
+
+        firstValue = null;
+        operator = "";
+        currentInput = "";
+      }
+    } else if (button.classList.contains("clear")) {
+      result.value = ""; // AC
+      currentInput = "";
+      firstValue = null;
+      operator = "";
     } else if (button.classList.contains("delete")) {
-      result.value = result.value.slice(0, -1);
-    } else {
-      result.value += button.textContent;
+      currentInput = currentInput.slice(0, -1); // Backspace
+      result.value = currentInput;
     }
   });
 });
+
+function calculate(firstValue, operator, secondValue) {
+  switch (operator) {
+    case "+":
+      return firstValue + secondValue;
+    case "-":
+      return firstValue - secondValue;
+    case "*":
+      return firstValue * secondValue;
+    case "/":
+      return secondValue !== 0 ? firstValue / secondValue : "Error";
+    default:
+      return "";
+  }
+}
