@@ -15,11 +15,17 @@ buttons.forEach((button) => {
       }
       currentInput += buttonText;
       result.value = currentInput;
+    } else if (button.classList.contains("decimal")) {
+      if (!currentInput.includes(".")) {
+        currentInput += buttonText;
+        result.value = currentInput;
+      }
     } else if (button.classList.contains("operator")) {
       if (currentInput !== "") {
         firstValue = parseFloat(currentInput);
         operator = buttonText;
         currentInput = "";
+        result.value = "";
       }
     } else if (button.classList.contains("equals")) {
       if (firstValue !== null && currentInput !== "") {
@@ -51,8 +57,8 @@ function calculate(firstValue, operator, secondValue) {
     case "*":
       return firstValue * secondValue;
     case "/":
-      return secondValue !== 0 ? firstValue / secondValue : "Error";
+      return firstValue / secondValue;
     default:
-      return "";
+      return 0;
   }
 }
