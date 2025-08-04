@@ -1,47 +1,44 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Simple Calculator</title>
-    <link rel="icon" href="/assets/images/logo.png" />
-
-    <link
-      rel="stylesheet"
-      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
-    />
-    <link rel="stylesheet" href="/assets/css/style.css" />
-  </head>
-  <body>
-    <div id="app">
-      <div class="calculator">
-        <div class="display">
-          <input type="text" id="result" readonly />
-        </div>
-        <div class="buttons">
-          <button class="clear">AC</button>
-          <button class="delete">
-            <i class="fa-solid fa-delete-left"></i>
-          </button>
-          <button class="operator">/</button>
-          <button class="operator">*</button>
-          <button class="number">7</button>
-          <button class="number">8</button>
-          <button class="number">9</button>
-          <button class="operator">+</button>
-          <button class="number">4</button>
-          <button class="number">5</button>
-          <button class="number">6</button>
-          <button class="operator">-</button>
-          <button class="number">1</button>
-          <button class="number">2</button>
-          <button class="number">3</button>
-          <button class="equals">=</button>
-          <button class="number" id="zero">0</button>
-          <button class="decimal">.</button>
-        </div>
-      </div>
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Calculator</title>
+    <link rel="icon" href="/assets/images/logo.png"/>
+    <link rel="stylesheet" href="https://cdn.hugeicons.com/font/hgi-stroke-rounded.css" />
+    <link rel="stylesheet" href="./assets/css/style.css"/>
+</head>
+<body data-theme="dark">
+<button class="theme-toggle" id="themeToggle">
+    <i class="hgi hgi-stroke hgi-moon-02"></i>
+</button>
+<div class="calculator">
+    <div class="display">
+        <input type="text" id="result" readonly/>
     </div>
-    <script type="module" src="/assets/js/script.js"></script>
-  </body>
+    <div class="buttons">
+        <button class="clear">AC</button>
+        <button class="delete">
+            <i class="hgi hgi-stroke hgi-eraser-01"></i>
+        </button>
+        <button class="operator">/</button>
+        <button class="operator">*</button>
+        <button class="number">7</button>
+        <button class="number">8</button>
+        <button class="number">9</button>
+        <button class="operator">+</button>
+        <button class="number">4</button>
+        <button class="number">5</button>
+        <button class="number">6</button>
+        <button class="operator">-</button>
+        <button class="number">1</button>
+        <button class="number">2</button>
+        <button class="number">3</button>
+        <button class="equals">=</button>
+        <button class="number" id="zero">0</button>
+        <button class="decimal">.</button>
+    </div>
+</div>
+<script src="./assets/js/script.js"></script>
+</body>
 </html>

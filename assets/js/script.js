@@ -1,73 +1,126 @@
-const result = document.getElementById("result");
-const buttons = document.querySelectorAll("button");
+class Calculator {
+  constructor() {
+    this.result = document.getElementById("result");
+    this.buttons = document.querySelectorAll(".buttons button");
+    this.themeToggle = document.getElementById("themeToggle");
+    this.state = {
+      currentInput: "",
+      operator: "",
+      firstValue: null,
+      continueCalculation: false,
+    };
 
-let currentInput = "";
-let operator = "";
-let firstValue = null;
-let continueCalculation = false;
+    this.initEventListeners();
+  }
 
-buttons.forEach((button) => {
-  button.addEventListener("click", () => {
-    const buttonText = button.textContent;
+  initEventListeners() {
+    this.buttons.forEach((button) =>
+        button.addEventListener("click", () => this.handleButtonClick(button))
+    );
+    this.themeToggle.addEventListener("click", () => this.toggleTheme());
+  }
 
-    if (button.classList.contains("number")) {
-      if (continueCalculation) {
-        currentInput = buttonText;
-        continueCalculation = false;
-      } else {
-        currentInput += buttonText;
-      }
-      result.value = currentInput;
-    } else if (button.classList.contains("decimal")) {
-      if (!currentInput.includes(".")) {
-        currentInput += buttonText;
-        result.value = currentInput;
-      }
-    } else if (button.classList.contains("operator")) {
-      if (currentInput !== "" || result.value !== "") {
-        if (continueCalculation) {
-          firstValue = parseFloat(result.value);
-          continueCalculation = false;
-        } else {
-          firstValue = parseFloat(currentInput || result.value);
-        }
-        operator = buttonText;
-        currentInput = "";
-        result.value = "";
-      }
-    } else if (button.classList.contains("equals")) {
-      if (firstValue !== null && currentInput !== "") {
-        const secondValue = parseFloat(currentInput);
-        result.value = calculate(firstValue, operator, secondValue);
+  handleButtonClick(button) {
+    const {classList, textContent} = button;
 
-        firstValue = parseFloat(result.value);
-        operator = "";
-        currentInput = "";
-        continueCalculation = true;
-      }
-    } else if (button.classList.contains("clear")) {
-      result.value = ""; // AC
-      currentInput = "";
-      firstValue = null;
-      continueCalculation = false;
-    } else if (button.classList.contains("delete")) {
-      currentInput = currentInput.slice(0, -1);
-      result.value = currentInput;
+    if (classList.contains("number")) {
+      this.handleNumber(textContent);
+    } else if (classList.contains("decimal")) {
+      this.handleDecimal();
+    } else if (classList.contains("operator")) {
+      this.handleOperator(textContent);
+    } else if (classList.contains("equals")) {
+      this.handleEquals();
+    } else if (classList.contains("clear")) {
+      this.handleClear();
+    } else if (classList.contains("delete")) {
+      this.handleDelete();
     }
-  });
-});
 
-function calculate(firstValue, operator, secondValue) {
-  switch (operator) {
-    case "+":
-      return firstValue + secondValue;
-    case "-":
-      return firstValue - secondValue;
-    case "*":
-      return firstValue * secondValue;
-    case "/":
-      return firstValue / secondValue;
-    default:
-      return secondValue;
+    this.updateDisplay();
+  }
+
+  handleNumber(value) {
+    if (this.state.continueCalculation) {
+      this.state.currentInput = value;
+      this.state.continueCalculation = false;
+    } else {
+      this.state.currentInput += value;
+    }
+  }
+
+  handleDecimal() {
+    if (!this.state.currentInput.includes(".")) {
+      this.state.currentInput += ".";
+    }
+  }
+
+  handleOperator(op) {
+    if (this.state.currentInput || this.result.value) {
+      this.state.firstValue = parseFloat(
+          this.state.currentInput || this.result.value
+      );
+      this.state.operator = op;
+      this.state.currentInput = "";
+      this.state.continueCalculation = false;
+    }
+  }
+
+  handleEquals() {
+    if (
+        this.state.firstValue !== null &&
+        this.state.currentInput !== ""
+    ) {
+      const secondValue = parseFloat(this.state.currentInput);
+      this.state.currentInput = this.calculate(
+          this.state.firstValue,
+          this.state.operator,
+          secondValue
+      ).toString();
+      this.state.firstValue = parseFloat(this.state.currentInput);
+      this.state.operator = "";
+      this.state.continueCalculation = true;
+    }
+  }
+
+  handleClear() {
+    this.state = {
+      currentInput: "",
+      operator: "",
+      firstValue: null,
+      continueCalculation: false,
+    };
+  }
+
+  handleDelete() {
+    this.state.currentInput = this.state.currentInput.slice(0, -1);
+  }
+
+  calculate(first, op, second) {
+    switch (op) {
+      case "+":
+        return first + second;
+      case "-":
+        return first - second;
+      case "*":
+        return first * second;
+      case "/":
+        return second !== 0 ? first / second : "Error";
+      default:
+        return second;
+    }
+  }
+
+  updateDisplay() {
+    this.result.value = this.state.currentInput || "";
+  }
+
+  toggleTheme() {
+    const body = document.body;
+    const isDark = body.dataset.theme === "dark";
+    body.dataset.theme = isDark ? "light" : "dark";
+    this.themeToggle.innerHTML = `<i class="hgi hgi-stroke hgi-${isDark ? "sun-03" : "moon-02" }"></i>`;
   }
 }
+
+new Calculator();
